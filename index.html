@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="input" autofocus type="text">
+    <br><br>
+    <ul id="list">
+
+    </ul>
+<script>
+    let input = document.getElementById("input");
+    let list = document.getElementById("list");
+    let id = 1;
+    let k = Object.keys(localStorage);
+    k.sort();
+    if(localStorage.length>id){
+        id = Number(k[k.length-1])+1;
+    };
+    function save(x){
+        localStorage.setItem(id,x);
+        id++;
+    };
+
+
+    function addToList(x,y){
+        let li = document.createElement("li");
+        let text = document.createTextNode(" "+x);
+        let btn = document.createElement("button");
+        let btnText = document.createTextNode("Delete");
+        let btnEdit = document.createElement("button");
+        let editText = document.createTextNode("Edit")
+        btn.appendChild(btnText);
+        btn.setAttribute("onclick",`rmov(${y})`)
+        btnEdit.appendChild(editText);
+        btnEdit.setAttribute("onclick",`edit(${y})`);
+        li.appendChild(btn);
+        li.appendChild(btnEdit);
+        li.appendChild(text);
+        li.setAttribute("id","list-"+y)
+        list.appendChild(li);
+        input.value = "";
+    };
+    function showList(){
+        console.log(k);
+        k.map(function (el) {
+            addToList(localStorage.getItem(el),el);
+        })
+    };
+    function rmov(x){
+        localStorage.removeItem(x);
+        let current = document.getElementById("list-"+x);
+        current.remove();
+        console.log(x)
+    };
+    function edit(x){
+        // let currentValue = localStorage.setItem(x,editBox)
+        let current = document.getElementById("list-"+x);
+        let editBox = prompt("add text","EditText");
+        current.innerHTML = editBox
+    }
+    document.addEventListener("keyup",function(e){
+        if(e.keyCode==13){
+            let node = input.value;
+            console.log(node);
+            addToList(node);
+            save(node);
+        };
+    });
+
+    showList();
+
+    let mine = {
+        "name" : "Nyi",
+        "age" : 16
+    }
+
+
+</script>
+</body>
+</html>
